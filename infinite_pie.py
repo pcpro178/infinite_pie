@@ -1,4 +1,4 @@
-## @brief Python main program file
+"""Module for the main program."""
 
 import ip_empire
 
@@ -6,7 +6,6 @@ __empire: ip_empire.Empire = None
 
 # Defining main function
 def main():
-    print("hey there")
     __empire = ip_empire.Empire()
 
 
