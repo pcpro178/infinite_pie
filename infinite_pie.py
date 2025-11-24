@@ -1,16 +1,16 @@
-# Python program to demonstrate
-# main() function
+## @brief Python main program file
 
-import empire
+import ip_empire
 
-print("Hello")
+__empire: ip_empire.Empire = None
 
 # Defining main function
 def main():
     print("hey there")
+    __empire = ip_empire.Empire()
 
 
-# Using the special variable 
+# Using the special variable
 # __name__
 if __name__=="__main__":
     main()
