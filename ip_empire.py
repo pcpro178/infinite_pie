@@ -2,8 +2,10 @@
 
 from typing import List
 
+import inquirer
 import ip_name
 import ip_system
+
 
 class Empire:
     """Class for managing empires."""
@@ -14,7 +16,8 @@ class Empire:
 
     def __init__(self):
         print("Setting up new Empire . . .")
-        self.__name = input("Enter the name of your empire [or use random name generator]: ")
+        name: str = input("Enter the name of your empire [or use random name generator]: ")
+        self.__name = ip_name.Name("Empire", allow_custom=True, custom=name)
 
         if self.__name == "":
             self.__name = ip_name.Name(self.__class__.__name__)
@@ -29,10 +32,20 @@ class Empire:
 
         print(f"Empire {self.__name} created.")
 
-    def name_get(self):
-        """Get the current empire name."""
-        return self.__name
+        self.menu()
 
-    def name_set(self, name):
-        """Set a new empire name."""
-        self.__name = name
+    def menu(self):
+        """Display the empire menu."""
+        questions = [
+            inquirer.List(
+                'choice',
+                message=f"Empire Menu - {self.__name}",
+                choices=[
+                    'View Empire Details',
+                    'Manage Systems',
+                    'Exit Menu'
+                ],
+            ),
+        ]
+        answers = inquirer.prompt(questions)
+        return answers['choice']

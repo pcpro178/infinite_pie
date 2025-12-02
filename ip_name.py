@@ -14,20 +14,20 @@ class Name:
         """
         :param label: The label for the name (e.g., "Empire", "System").
         :param allow_custom: Whether to allow custom name input.
-        :param custom: The custom name to set, if any.
+        :param custom: The custom name to assign, if any.
         """
         if label is not None and label != "":
             self.__label = label
 
         if allow_custom:
             if custom is not None and custom != "":
-                if custom in lexicon.is_used():
-                    print(f"Custom name '{custom}' is already used. Generating random name instead.")
-                    self.__name = self.random()
+                if lexicon.is_used(custom):
+                    print(f"Custom name '{custom}' is already used.")
+                    self.__name = self.__prompt()
+                else:
+                    self.__name = custom
             else:
-                print(f"Custom name not specified for {label}.")
-                name: str = input(f"Enter {label} name [or use random name generator]: ")
-                self.__name = name if name != "" else self.random()
+                self.__name = self.random()
         else:
             self.__name = self.random()
 
@@ -35,6 +35,14 @@ class Name:
 
     def __str__(self):
         return self.__name
+
+    def __prompt(self) -> str:
+        """
+        Prompt for a name.
+        :return: The name entered by the user or a random name.
+        """
+        name: str = input(f"Enter {self.__label} name [or use random name generator]: ")
+        return name if name != "" else self.random()
 
     def get(self) -> str:
         """Get the current name."""

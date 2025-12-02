@@ -1,5 +1,7 @@
 """@brief Module for handling lexicon data."""
 
+from typing import List
+
 import random
 
 __names: dict = {
@@ -279,13 +281,16 @@ def assign(name: str, obj: object) -> bool:
         __names[name] = obj
         return True
 
+
 def is_used(name: str) -> bool:
     """Check if a lexicon entry is already assigned."""
     return name in __names and __names[name] is not None
 
+
 def random_unused() -> str:
     """Select a random, unused lexicon entry."""
     return random.choice([k for k, v in __names.items() if v is None])
+
 
 def select(name: str) -> object:
     """Select a lexicon entry by name."""
