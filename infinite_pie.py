@@ -4,12 +4,14 @@ import ip_empire
 
 __empire: ip_empire.Empire = None
 
+
 # Defining main function
 def main():
     __empire = ip_empire.Empire()
+    __empire.cycle()
 
 
 # Using the special variable
 # __name__
-if __name__=="__main__":
+if __name__ == "__main__":
     main()

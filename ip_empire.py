@@ -3,49 +3,78 @@
 from typing import List
 
 import inquirer
-import ip_name
-import ip_system
+
+from ip_name import Name
+from ip_options import Options
+from ip_ship import Ship
+from ip_system import System
 
 
-class Empire:
+class Empire(Options):
     """Class for managing empires."""
 
-    __name: ip_name.Name = None
-    __num_systems: int = None
-    __systems: List[ip_system.System] = []
+    __name: Name = None
+    __ships: List[Ship] = []
+    __systems: List[System] = []
+
+    __questions = [
+        inquirer.List(
+            'choice',
+            message=f"Empire Menu",
+            choices=[
+                'View Empire Details',
+                'Manage Systems',
+                'Exit Menu'
+            ],
+        ),
+    ]
 
     def __init__(self):
+        super().__init__()
         print("Setting up new Empire . . .")
         name: str = input("Enter the name of your empire [or use random name generator]: ")
-        self.__name = ip_name.Name("Empire", allow_custom=True, custom=name)
+        self.__name = Name("Empire", allow_custom=True, custom=name)
 
         if self.__name == "":
-            self.__name = ip_name.Name(self.__class__.__name__)
+            self.__name = Name(self.__class__.__name__)
 
+        # Create initial systems
         num_systems: str = None
         while num_systems is None or num_systems == 0 or not num_systems.isdigit():
-            num_systems = input("Enter the number of systems in your empire: ")
-        self.__num_systems = int(num_systems)
+            num_systems = input("Enter the starting number of systems: ")
+        for i in range(int(num_systems)):
+            self.__systems.append(System())
 
-        for i in range(self.__num_systems):
-            self.__systems.append(ip_system.System())
+        # Create initial ships
+        num_ships: str = None
+        while num_ships is None or num_ships == 0 or not num_ships.isdigit():
+            num_ships = input("Enter the starting number of ships: ")
+        for i in range(int(num_ships)):
+            self.__ships.append(Ship())
 
         print(f"Empire {self.__name} created.")
 
+    def __str__(self) -> str:
+        s: str = f"Empire: {self.__name}\r\n"
+        s += f"Number of Systems: {len(self.__systems)}\r\n"
+        for system in self.__systems:
+            s += f" - {system}\r\n";
+        s += f"Number of Ships: {len(self.__ships)}\r\n"
+        for ship in self.__ships:
+            s += f" - {ship}\r\n"
+        return s
+
+    def cycle(self):
+        """Complete a temporal cycle (i.e. a player turn, as it were)."""
         self.menu()
 
     def menu(self):
         """Display the empire menu."""
-        questions = [
-            inquirer.List(
-                'choice',
-                message=f"Empire Menu - {self.__name}",
-                choices=[
-                    'View Empire Details',
-                    'Manage Systems',
-                    'Exit Menu'
-                ],
-            ),
-        ]
-        answers = inquirer.prompt(questions)
+        answers = inquirer.prompt(self.__questions)
+
+        if answers['choice'] == 'View Empire Details':
+            print(str(self))
+        elif answers['choice'] == 'Manage Systems':
+            print("System management not yet implemented.")
+
         return answers['choice']
