@@ -10,6 +10,9 @@ from ip_ship import Ship
 from ip_system import System
 
 
+MAX_AUTO_LIST: int = 5
+
+
 class Empire(Options):
     """Class for managing empires."""
 
@@ -57,11 +60,13 @@ class Empire(Options):
     def __str__(self) -> str:
         s: str = f"Empire: {self.__name}\r\n"
         s += f"Number of Systems: {len(self.__systems)}\r\n"
-        for system in self.__systems:
-            s += f" - {system}\r\n";
+        if (MAX_AUTO_LIST >= len(self.__systems)) or ('y' == input(f"Show all? [Yes/No] ")[0].lower()):
+            for system in self.__systems:
+                s += f" - {system}\r\n";
         s += f"Number of Ships: {len(self.__ships)}\r\n"
-        for ship in self.__ships:
-            s += f" - {ship}\r\n"
+        if (MAX_AUTO_LIST >= len(self.__ships)) or ('y' == input("Show all? [Yes/No] ")[0].lower()):
+            for ship in self.__ships:
+                s += f" - {ship}\r\n"
         return s
 
     def cycle(self):
