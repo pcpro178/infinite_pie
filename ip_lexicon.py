@@ -287,9 +287,10 @@ def is_used(name: str) -> bool:
     return name in __names and __names[name] is not None
 
 
-def random_unused() -> str:
+def random_unused() -> str|None:
     """Select a random, unused lexicon entry."""
-    return random.choice([k for k, v in __names.items() if v is None])
+    available_names: List = [k for k, v in __names.items() if v is None]
+    return random.choice(available_names) if 0 < len(available_names) else None
 
 
 def select(name: str) -> object:
