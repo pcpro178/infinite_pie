@@ -31,7 +31,12 @@ class Name:
         else:
             self.__name = self.random()
 
-        lexicon.assign(self.__name, self)
+        if self.__name is None:
+            print("No more unused names available in lexicon!")
+
+        while self.__name is None or lexicon.assign(self.__name, self) is False:
+            self.__name = input("Enter new name: ")
+            self.__name = None if not self.__name else self.__name
 
     def __str__(self):
         return self.__name

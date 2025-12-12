@@ -265,8 +265,13 @@ __names: dict = {
         'Zathetia': None,
     }
 
+
 def assign(name: str, obj: object) -> bool:
-    """Assign an object to a lexicon entry by name."""
+    """! Assign an object to a lexicon entry by name.
+    :param name: Name to assign
+    :param obj: Object to which name will be assigned
+    :return: Boolean indicating success
+    """
     if name not in __names:
         print(f"Name '{name}' not found in lexicon.")
         confirm: str = input(f"Add '{name}' to lexicon? [Yes/No]: ")
@@ -283,16 +288,24 @@ def assign(name: str, obj: object) -> bool:
 
 
 def is_used(name: str) -> bool:
-    """Check if a lexicon entry is already assigned."""
+    """! Check if a lexicon entry is already assigned.
+    :param name: Name of interest
+    :return: Boolean indicating whether name is in use
+    """
     return name in __names and __names[name] is not None
 
 
-def random_unused() -> str|None:
-    """Select a random, unused lexicon entry."""
+def random_unused() -> str | None:
+    """! Select a random, unused lexicon entry.
+    :return: Randome name, if available, or None
+    """
     available_names: List = [k for k, v in __names.items() if v is None]
     return random.choice(available_names) if 0 < len(available_names) else None
 
 
 def select(name: str) -> object:
-    """Select a lexicon entry by name."""
+    """! Select a lexicon entry by name.
+    :param name: Name of interest
+    :return: Object for specified name
+    """
     return __names[name] if name in __names else None
