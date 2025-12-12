@@ -5,7 +5,6 @@ from typing import List
 import inquirer
 
 from ip_name import Name
-from ip_options import Options
 from ip_ship import Ship
 from ip_system import System
 
@@ -13,7 +12,7 @@ from ip_system import System
 MAX_AUTO_LIST: int = 5
 
 
-class Empire(Options):
+class Empire:
     """Class for managing empires."""
 
     __name: Name = None
