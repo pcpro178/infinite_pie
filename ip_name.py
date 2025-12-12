@@ -11,7 +11,7 @@ class Name:
     __name: str = "DefaultName"
 
     def __init__(self, label: str, allow_custom: bool = False, custom: str = "") -> None:
-        """
+        """! Initialize a new name object.
         :param label: The label for the name (e.g., "Empire", "System").
         :param allow_custom: Whether to allow custom name input.
         :param custom: The custom name to assign, if any.
@@ -37,21 +37,22 @@ class Name:
         return self.__name
 
     def __prompt(self) -> str:
-        """
-        Prompt for a name.
+        """! Prompt for a name.
         :return: The name entered by the user or a random name.
         """
         name: str = input(f"Enter {self.__label} name [or use random name generator]: ")
         return name if name != "" else self.random()
 
-    def get(self) -> str:
-        """Get the current name."""
+    def name(self, name: str = None) -> str:
+        """! Accessor function for name attribute.
+        :param name: Name of interest
+        :return: The name attribute
+        """
+        if name is not None:
+            self.__name = name
         return self.__name
 
-    def set(self, name: str) -> None:
-        """Set a new name."""
-        self.__name = name
-
-    def random(self, adjs: List[str] = list(), nouns: List[str] = list()) -> str:
-        """Generate a random name using all available categories."""
+    def random(self) -> str:
+        """! Generate a random name using all available categories.
+        :return: Random name from lexicon"""
         return lexicon.random_unused()

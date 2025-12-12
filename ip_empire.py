@@ -1,5 +1,9 @@
 """Module for managing empires."""
 
+import os
+
+from cmd import Cmd
+from io import StringIO
 from typing import List
 
 import inquirer
@@ -9,6 +13,7 @@ from ip_ship import Ship
 from ip_system import System
 
 
+COL_PADDING: int = 2
 MAX_AUTO_LIST: int = 5
 
 
@@ -46,6 +51,7 @@ class Empire:
             num_systems = input("Enter the starting number of systems: ")
         for i in range(int(num_systems)):
             self.__systems.append(System())
+        self.__systems.sort()
 
         # Create initial ships
         num_ships: str = None
@@ -53,19 +59,24 @@ class Empire:
             num_ships = input("Enter the starting number of ships: ")
         for i in range(int(num_ships)):
             self.__ships.append(Ship())
+        self.__ships.sort()
 
         print(f"Empire {self.__name} created.")
 
     def __str__(self) -> str:
+        display_columns: int = os.get_terminal_size().columns
         s: str = f"Empire: {self.__name}\r\n"
+
         s += f"Number of Systems: {len(self.__systems)}\r\n"
-        if (MAX_AUTO_LIST >= len(self.__systems)) or ('y' == input(f"Show all? [Yes/No] ")[0].lower()):
-            for system in self.__systems:
-                s += f" - {system}\r\n";
+        system_names_buffer: StringIO = StringIO()
+        Cmd(stdout=system_names_buffer).columnize([x.name() for x in self.__systems], displaywidth=display_columns)
+        s += system_names_buffer.getvalue()
+
         s += f"Number of Ships: {len(self.__ships)}\r\n"
-        if (MAX_AUTO_LIST >= len(self.__ships)) or ('y' == input("Show all? [Yes/No] ")[0].lower()):
-            for ship in self.__ships:
-                s += f" - {ship}\r\n"
+        ship_names_buffer: StringIO = StringIO()
+        Cmd(stdout=ship_names_buffer).columnize([x.name() for x in self.__ships], displaywidth=display_columns)
+        s += ship_names_buffer.getvalue()
+
         return s
 
     def cycle(self):

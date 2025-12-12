@@ -171,7 +171,7 @@ __names: dict = {
         'Nervontia': None,
         'Neva Efe': None,
         'Nevisci': None,
-        'Ngoandbritishandthio': None,
+        'Ngoanthio': None,
         'Nilaturkscook': None,
         'Ninnairebripri': None,
         'Noresta': None,
