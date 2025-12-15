@@ -70,12 +70,14 @@ class Empire:
         s += f"Number of Systems: {len(self.__systems)}\r\n"
         system_names_buffer: StringIO = StringIO()
         Cmd(stdout=system_names_buffer).columnize([x.name() for x in self.__systems], displaywidth=display_columns)
-        s += system_names_buffer.getvalue()
+        for line in system_names_buffer.getvalue().splitlines():
+            s += "  " + line + "\r\n"
 
         s += f"Number of Ships: {len(self.__ships)}\r\n"
         ship_names_buffer: StringIO = StringIO()
         Cmd(stdout=ship_names_buffer).columnize([x.name() for x in self.__ships], displaywidth=display_columns)
-        s += ship_names_buffer.getvalue()
+        for line in ship_names_buffer.getvalue().splitlines():
+            s += "  " + line + "\r\n"
 
         return s
 
