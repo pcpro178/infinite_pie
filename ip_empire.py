@@ -4,13 +4,15 @@ import os
 
 from cmd import Cmd
 from io import StringIO
-from typing import List
+from typing import List, Type, TypeVar
 
 import inquirer
 
 from ip_name import Name
 from ip_ship import Ship
 from ip_system import System
+
+T = TypeVar('T')
 
 
 COL_PADDING: int = 2
@@ -36,7 +38,9 @@ class Empire:
         ),
     ]
 
-    def __init__(self):
+    def __init__(self) -> None:
+        """! Initializes Empire object instance
+        """
         super().__init__()
         print("Setting up new Empire . . .")
         name: str = input("Enter the name of your empire [or use random name generator]: ")
@@ -46,46 +50,60 @@ class Empire:
             self.__name = Name(self.__class__.__name__)
 
         # Create initial systems
-        num_systems: str = None
-        while num_systems is None or num_systems == 0 or not num_systems.isdigit():
-            num_systems = input("Enter the starting number of systems: ")
-        for i in range(int(num_systems)):
-            self.__systems.append(System())
-        self.__systems.sort()
+        self.__create_members(System, self.__systems)
 
         # Create initial ships
-        num_ships: str = None
-        while num_ships is None or num_ships == 0 or not num_ships.isdigit():
-            num_ships = input("Enter the starting number of ships: ")
-        for i in range(int(num_ships)):
-            self.__ships.append(Ship())
-        self.__ships.sort()
+        self.__create_members(Ship, self.__ships)
 
         print(f"Empire {self.__name} created.")
 
     def __str__(self) -> str:
-        display_columns: int = os.get_terminal_size().columns
+        """! Override function to generate object as human readable string
+        :return: String representation of object
+        """
         s: str = f"Empire: {self.__name}\r\n"
-
-        s += f"Number of Systems: {len(self.__systems)}\r\n"
-        system_names_buffer: StringIO = StringIO()
-        Cmd(stdout=system_names_buffer).columnize([x.name() for x in self.__systems], displaywidth=display_columns)
-        for line in system_names_buffer.getvalue().splitlines():
-            s += "  " + line + "\r\n"
-
-        s += f"Number of Ships: {len(self.__ships)}\r\n"
-        ship_names_buffer: StringIO = StringIO()
-        Cmd(stdout=ship_names_buffer).columnize([x.name() for x in self.__ships], displaywidth=display_columns)
-        for line in ship_names_buffer.getvalue().splitlines():
-            s += "  " + line + "\r\n"
-
+        s += self.__members_list_to_string(System, self.__systems)
+        s += self.__members_list_to_string(Ship, self.__ships)
         return s
 
-    def cycle(self):
+    def __create_members(self, typeof: Type[T], listof: list) -> None:
+        """! Instaniates lists of object members
+        :param typeof: Member list type
+        :param listof: Member list
+        """
+        num_create_str: str = None
+        type_name: str = typeof.__name__.lower()
+        while num_create_str is None or num_create_str == 0 or not num_create_str.isdigit():
+            num_create_str = input(f"Enter the starting number of {type_name}s: ")
+        num_create_int: int = int(num_create_str)
+        print(f"{type_name[0].upper() + type_name[1:]}{'s' if 1 < num_create_int else ''} created:", end='')
+        for i in range(num_create_int):
+            obj: object = typeof()
+            listof.append(obj)
+            print(f"{',' if 0 < i else ''} {obj.name()}", end='')
+        listof.sort()
+        print()
+
+    def __members_list_to_string(self, typeof: Type[T], listof: list) -> str:
+        """! Converts specified member list to string
+        :param typeof: Member list type
+        :param listof: Member list
+        :return: String representation of member list
+        """
+        display_columns: int = os.get_terminal_size().columns
+        type_name: str = typeof.__name__.lower()
+        s: str = f"Number of {type_name[0].upper() + type_name[1:]}s: {len(listof)}\r\n"
+        names_buffer: StringIO = StringIO()
+        Cmd(stdout=names_buffer).columnize([x.name() for x in listof], displaywidth=display_columns)
+        for line in names_buffer.getvalue().splitlines():
+            s += "  " + line + "\r\n"
+        return s
+
+    def cycle(self) -> None:
         """Complete a temporal cycle (i.e. a player turn, as it were)."""
         self.menu()
 
-    def menu(self):
+    def menu(self) -> None:
         """Display the empire menu."""
         answers = inquirer.prompt(self.__questions)
 

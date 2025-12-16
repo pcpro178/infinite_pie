@@ -13,7 +13,6 @@ class System:
     def __init__(self):
         """! Initialize a new System."""
         self.__name = ip_name.Name(self.__class__.__name__)
-        print(f"System {self.__name} created.")
 
     def __eq__(self, obj: System) -> bool:
         """! Override equality comparison (==) operator

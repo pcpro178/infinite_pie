@@ -13,7 +13,6 @@ class Ship:
     def __init__(self):
         """! Initialize a new Ship."""
         self.__name = ip_name.Name(self.__class__.__name__)
-        print(f"Ship {self.__name} created.")
 
     def __eq__(self, obj: Ship) -> bool:
         """! Override equality comparison (==) operator
