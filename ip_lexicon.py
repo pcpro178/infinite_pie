@@ -278,16 +278,13 @@ def assign(name: str, obj: object) -> bool:
         print("Error: No object to assign!")
         return False
     elif name not in __names:
-        print(f"Name '{name}' not found in lexicon.")
         confirm: str = ""
         while confirm == "":
-            confirm = input(f"Add '{name}' to lexicon? [Yes/No]: ")
+            confirm = input(f"Name '{name}' not found in lexicon. Add? [Yes/No]: ")
         if confirm.lower()[0] == 'y':
             __names[name] = obj
-            print(f"Added '{name}' to lexicon.")
             return True
         else:
-            print(f"Did not add '{name}' to lexicon.")
             return False
     else:
         __names[name] = obj
