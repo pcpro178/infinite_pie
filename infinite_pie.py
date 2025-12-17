@@ -6,6 +6,8 @@
 
 from ip_play import Play
 
+import ip_play as play
+
 
 ################################################################################
 # Constants & Globals
@@ -20,7 +22,7 @@ __game: Play = Play()
 
 def main():
     """! Main function for the program."""
-    while __game.cycle():
+    while __game.menu() != play.MenuChoices.EXIT:
         pass
 
 

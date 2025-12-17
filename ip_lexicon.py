@@ -285,23 +285,10 @@ def assign(name: str, obj: object) -> bool:
     :param obj: Object to which name will be assigned
     :return: Boolean indicating success
     """
-    if name is None or name == "":
-        return False
-    elif object is None:
-        print("Error: No object to assign!")
-        return False
-    elif name not in __names:
-        confirm: str = ""
-        while confirm == "":
-            confirm = input(f"Name '{name}' not found in lexicon. Add? [Yes/No]: ")
-        if confirm.lower()[0] == 'y':
-            __names[name] = obj
-            return True
-        else:
-            return False
-    else:
-        __names[name] = obj
-        return True
+    if name is None or name == "": raise ValueError("Param 'name' must be provided and cannot be empty.")
+    if obj is None: raise ValueError("Param 'obj' must be provided and cannot be None.")
+
+    __names[name] = obj
 
 
 def is_used(name: str) -> bool:

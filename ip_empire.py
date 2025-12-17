@@ -7,6 +7,7 @@
 import os
 
 from cmd import Cmd
+from enum import StrEnum
 from io import StringIO
 from typing import List, Type, TypeVar
 
@@ -24,17 +25,20 @@ from ip_system import System
 COL_PADDING: int = 2
 MAX_AUTO_LIST: int = 5
 
-MENU_CHOICE_VIEW_DETAILS: str = 'View Details'
-MENU_CHOICE_MANAGE_SYSTEMS: str = 'Manage Systems'
-MENU_CHOICE_MANAGE_SHIPS: str = 'Manage Ships'
-MENU_CHOICE_EXIT: str = 'Exit'
-
 T: TypeVar = TypeVar('T')
 
 
 ################################################################################
-# Class definition
+# Class definitions
 ################################################################################
+
+class MenuChoices(StrEnum):
+    """! Enumeration for empire menu choices."""
+    VIEW_DETAILS: str = 'View Details'
+    MANAGE_SYSTEMS: str = 'Manage Systems'
+    MANAGE_SHIPS: str = 'Manage Ships'
+    EXIT: str = 'Exit'
+
 
 class Empire:
     """! Class for managing empires."""
@@ -48,11 +52,11 @@ class Empire:
         """
         super().__init__()
         print("Setting up new Empire . . .")
-        name: str = input("Enter the name of your empire [or use random name generator]: ")
-        self.__name = Name("Empire", allow_custom=True, custom=name)
+        self.__name = Name("Empire", f"Enter {self.__class__.__name__} name [or empty for random]: ")
+        self.__name.assign(self)
 
-        if self.__name == "":
-            self.__name = Name(self.__class__.__name__)
+        if self.__name is None or self.__name == "":
+            raise ValueError("Empire name assignment failed.")
 
         # Create initial systems
         self.__create_members(System, self.__systems)
@@ -85,7 +89,7 @@ class Empire:
         for i in range(num_create_int):
             obj: object = typeof()
             listof.append(obj)
-            print(f"{',' if 0 < i else ''} {obj.name()}", end='')
+            print(f"{',' if 0 < i else ''} {obj.name}", end='')
         listof.sort()
         print()
 
@@ -99,15 +103,14 @@ class Empire:
         type_name: str = typeof.__name__.lower()
         s: str = f"Number of {type_name[0].upper() + type_name[1:]}s: {len(listof)}\r\n"
         names_buffer: StringIO = StringIO()
-        Cmd(stdout=names_buffer).columnize([x.name() for x in listof], displaywidth=display_columns)
+        Cmd(stdout=names_buffer).columnize([x.name for x in listof], displaywidth=display_columns)
         for line in names_buffer.getvalue().splitlines():
             s += "  " + line + "\r\n"
         return s
 
-    # todo jfell cleanup
-    # def cycle(self) -> None:
-    #     """Complete a temporal cycle (i.e. a player turn, as it were)."""
-    #     self.menu()
+    def cycle(self) -> None:
+        """! Complete a turn cycle for the object."""
+        print(f"Function '{self.cycle.__name__}' not yet implemented.")
 
     def menu(self) -> str | None:
         """! Display the empire menu.
@@ -115,23 +118,19 @@ class Empire:
         """
         questions: inquirer.List = [
             inquirer.List(
-                'choice',
-                message="Empire Menu",
-                choices=[
-                    MENU_CHOICE_VIEW_DETAILS,
-                    MENU_CHOICE_MANAGE_SYSTEMS,
-                    MENU_CHOICE_EXIT
-                ],
+                'choice', message="Empire Menu", choices=[str(x) for x in MenuChoices],
             ),
         ]
 
         answers: dict = inquirer.prompt(questions)
 
-        if answers['choice'] == MENU_CHOICE_VIEW_DETAILS:
+        if answers['choice'] == MenuChoices.VIEW_DETAILS:
             print(str(self))
-        elif answers['choice'] == MENU_CHOICE_MANAGE_SYSTEMS:
-            print("System management not yet implemented.")
-        elif answers['choice'] == MENU_CHOICE_EXIT:
+        elif answers['choice'] == MenuChoices.MANAGE_SYSTEMS:
+            print(f"Menu option '{answers['choice']}' not yet implemented.")
+        elif answers['choice'] == MenuChoices.MANAGE_SHIPS:
+            print(f"Menu option '{answers['choice']}' not yet implemented.")
+        elif answers['choice'] == MenuChoices.EXIT:
             print("Exiting . . .")
         else:
             print("Invalid choice.")
