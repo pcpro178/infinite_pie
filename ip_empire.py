@@ -1,5 +1,9 @@
 """! Module for managing empires."""
 
+################################################################################
+# Imports
+################################################################################
+
 import os
 
 from cmd import Cmd
@@ -12,15 +16,25 @@ from ip_name import Name
 from ip_ship import Ship
 from ip_system import System
 
-T = TypeVar('T')
 
+################################################################################
+# Constants & Globals
+################################################################################
 
 COL_PADDING: int = 2
 MAX_AUTO_LIST: int = 5
+
 MENU_CHOICE_VIEW_DETAILS: str = 'View Details'
 MENU_CHOICE_MANAGE_SYSTEMS: str = 'Manage Systems'
+MENU_CHOICE_MANAGE_SHIPS: str = 'Manage Ships'
 MENU_CHOICE_EXIT: str = 'Exit'
 
+T: TypeVar = TypeVar('T')
+
+
+################################################################################
+# Class definition
+################################################################################
 
 class Empire:
     """! Class for managing empires."""

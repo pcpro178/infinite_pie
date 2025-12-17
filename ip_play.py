@@ -1,10 +1,17 @@
 """! Module for handling gameplay."""
 
+################################################################################
+# Imports
+################################################################################
 
 from ip_empire import Empire
 
 import ip_empire as empire
 
+
+################################################################################
+# Class definition
+################################################################################
 
 class Play:
     """! Class for handling gameplay."""
@@ -19,4 +26,4 @@ class Play:
         """! Complete a temporal cycle (i.e. a player turn, as it were).
         :return: Boolean indicating whether to continue playing
         """
-        return True if self.__empire.menu() != empire.MENU_CHOICE_EXIT else False
+        return self.__empire.menu() != empire.MENU_CHOICE_EXIT
