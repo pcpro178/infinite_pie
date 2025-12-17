@@ -1,4 +1,4 @@
-"""Module for managing empires."""
+"""! Module for managing empires."""
 
 import os
 
@@ -17,26 +17,17 @@ T = TypeVar('T')
 
 COL_PADDING: int = 2
 MAX_AUTO_LIST: int = 5
+MENU_CHOICE_VIEW_DETAILS: str = 'View Details'
+MENU_CHOICE_MANAGE_SYSTEMS: str = 'Manage Systems'
+MENU_CHOICE_EXIT: str = 'Exit'
 
 
 class Empire:
-    """Class for managing empires."""
+    """! Class for managing empires."""
 
     __name: Name = None
     __ships: List[Ship] = []
     __systems: List[System] = []
-
-    __questions = [
-        inquirer.List(
-            'choice',
-            message=f"Empire Menu",
-            choices=[
-                'View Empire Details',
-                'Manage Systems',
-                'Exit Menu'
-            ],
-        ),
-    ]
 
     def __init__(self) -> None:
         """! Initializes Empire object instance
@@ -99,17 +90,36 @@ class Empire:
             s += "  " + line + "\r\n"
         return s
 
-    def cycle(self) -> None:
-        """Complete a temporal cycle (i.e. a player turn, as it were)."""
-        self.menu()
+    # todo jfell cleanup
+    # def cycle(self) -> None:
+    #     """Complete a temporal cycle (i.e. a player turn, as it were)."""
+    #     self.menu()
 
-    def menu(self) -> None:
-        """Display the empire menu."""
-        answers = inquirer.prompt(self.__questions)
+    def menu(self) -> str | None:
+        """! Display the empire menu.
+        :return: The choice made by the user
+        """
+        questions: inquirer.List = [
+            inquirer.List(
+                'choice',
+                message="Empire Menu",
+                choices=[
+                    MENU_CHOICE_VIEW_DETAILS,
+                    MENU_CHOICE_MANAGE_SYSTEMS,
+                    MENU_CHOICE_EXIT
+                ],
+            ),
+        ]
 
-        if answers['choice'] == 'View Empire Details':
+        answers: dict = inquirer.prompt(questions)
+
+        if answers['choice'] == MENU_CHOICE_VIEW_DETAILS:
             print(str(self))
-        elif answers['choice'] == 'Manage Systems':
+        elif answers['choice'] == MENU_CHOICE_MANAGE_SYSTEMS:
             print("System management not yet implemented.")
+        elif answers['choice'] == MENU_CHOICE_EXIT:
+            print("Exiting . . .")
+        else:
+            print("Invalid choice.")
 
         return answers['choice']

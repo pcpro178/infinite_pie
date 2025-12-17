@@ -1,4 +1,4 @@
-"""Module for handling stellar systems."""
+"""! Module for handling stellar systems."""
 
 from __future__ import annotations
 
@@ -6,7 +6,7 @@ import ip_name
 
 
 class System:
-    """Class for handling stellar systems."""
+    """!Class for handling stellar systems."""
 
     __name: ip_name.Name = None
 

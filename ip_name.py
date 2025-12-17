@@ -1,11 +1,10 @@
-"""Module for handling names."""
-
-from typing import List
+"""! Module for handling names."""
 
 import ip_lexicon as lexicon
 
+
 class Name:
-    """Class for handling names."""
+    """! Class for handling names."""
 
     __label: str = "DefaultLabel"
     __name: str = "DefaultName"

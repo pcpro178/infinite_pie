@@ -1,4 +1,4 @@
-"""Module for base ship type."""
+"""! Module for base ship type."""
 
 from __future__ import annotations
 
@@ -6,7 +6,7 @@ import ip_name
 
 
 class Ship:
-    """Class for base ship type."""
+    """!Class for base ship type."""
 
     __name: ip_name.Name = None
 
