@@ -6,14 +6,14 @@
 
 from ip_play import Play
 
-import ip_play as play
-
 
 ################################################################################
 # Constants & Globals
 ################################################################################
 
-__game: Play = Play()
+MENU_CHOICE_EXIT: str = "Exit"
+
+__game: Play = Play([MENU_CHOICE_EXIT])
 
 
 ################################################################################
@@ -22,8 +22,11 @@ __game: Play = Play()
 
 def main():
     """! Main function for the program."""
-    while __game.menu() != play.MenuChoices.EXIT:
-        pass
+    __game.menu.show()
+
+    while __game.menu.response != MENU_CHOICE_EXIT:
+        __game.run()
+        __game.menu.show()
 
 
 ################################################################################

@@ -13,6 +13,8 @@ from typing import List, Type, TypeVar
 
 import inquirer
 
+from ip_actionable import Actionable
+from ip_menu import Menu
 from ip_name import Name
 from ip_ship import Ship
 from ip_system import System
@@ -24,8 +26,7 @@ from ip_system import System
 
 COL_PADDING: int = 2
 MAX_AUTO_LIST: int = 5
-
-T: TypeVar = TypeVar('T')
+MENU_CHOICE_RETURN: str = "Return to Empire Menu"
 
 
 ################################################################################
@@ -37,26 +38,28 @@ class MenuChoices(StrEnum):
     VIEW_DETAILS: str = 'View Details'
     MANAGE_SYSTEMS: str = 'Manage Systems'
     MANAGE_SHIPS: str = 'Manage Ships'
-    EXIT: str = 'Exit'
 
 
-class Empire:
+class Empire(Actionable):
     """! Class for managing empires."""
 
+    __choices: List[str] = [str(x) for x in MenuChoices]
     __name: Name = None
     __ships: List[Ship] = []
     __systems: List[System] = []
 
-    def __init__(self) -> None:
-        """! Initializes Empire object instance
+    def __init__(self, parent_choices: List[str] = None) -> None:
+        """! Initializes Empire object instance.
+        :param parent_choices: Optional menu choices from parent object
         """
-        super().__init__()
         print("Setting up new Empire . . .")
+
+        self.__choices.extend(parent_choices or [])
+
+        super().__init__(self.__choices, "Empire Menu")
+
         self.__name = Name("Empire", f"Enter {self.__class__.__name__} name [or empty for random]: ")
         self.__name.assign(self)
-
-        if self.__name is None or self.__name == "":
-            raise ValueError("Empire name assignment failed.")
 
         # Create initial systems
         self.__create_members(System, self.__systems)
@@ -75,7 +78,7 @@ class Empire:
         s += self.__members_list_to_string(Ship, self.__ships)
         return s
 
-    def __create_members(self, typeof: Type[T], listof: list) -> None:
+    def __create_members(self, typeof: Type, listof: list) -> None:
         """! Instaniates lists of object members
         :param typeof: Member list type
         :param listof: Member list
@@ -93,7 +96,7 @@ class Empire:
         listof.sort()
         print()
 
-    def __members_list_to_string(self, typeof: Type[T], listof: list) -> str:
+    def __members_list_to_string(self, typeof: Type, listof: list) -> str:
         """! Converts specified member list to string
         :param typeof: Member list type
         :param listof: Member list
@@ -112,27 +115,13 @@ class Empire:
         """! Complete a turn cycle for the object."""
         print(f"Function '{self.cycle.__name__}' not yet implemented.")
 
-    def menu(self) -> str | None:
-        """! Display the empire menu.
-        :return: The choice made by the user
-        """
-        questions: inquirer.List = [
-            inquirer.List(
-                'choice', message="Empire Menu", choices=[str(x) for x in MenuChoices],
-            ),
-        ]
-
-        answers: dict = inquirer.prompt(questions)
-
-        if answers['choice'] == MenuChoices.VIEW_DETAILS:
+    def run(self) -> None:
+        """! Run the empire menu selection."""
+        if self.menu.response == MenuChoices.VIEW_DETAILS:
             print(str(self))
-        elif answers['choice'] == MenuChoices.MANAGE_SYSTEMS:
-            print(f"Menu option '{answers['choice']}' not yet implemented.")
-        elif answers['choice'] == MenuChoices.MANAGE_SHIPS:
-            print(f"Menu option '{answers['choice']}' not yet implemented.")
-        elif answers['choice'] == MenuChoices.EXIT:
-            print("Exiting . . .")
+        elif self.menu.response == MenuChoices.MANAGE_SYSTEMS:
+            print(f"Menu option '{self.menu.response}' not yet implemented.")
+        elif self.menu.response == MenuChoices.MANAGE_SHIPS:
+            print(f"Menu option '{self.menu.response}' not yet implemented.")
         else:
-            print("Invalid choice.")
-
-        return answers['choice']
+            raise ValueError(f"Invalid choice: {self.menu.response}")

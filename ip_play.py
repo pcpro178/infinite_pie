@@ -5,12 +5,17 @@
 ################################################################################
 
 from enum import StrEnum
+from typing import List
 
-import inquirer
-
+from ip_actionable import Actionable
 from ip_empire import Empire
 
-import ip_empire as empire
+
+################################################################################
+# Constants & Globals
+################################################################################
+
+MENU_CHOICE_RETURN: str = "Return to Main Menu"
 
 
 ################################################################################
@@ -22,51 +27,56 @@ class MenuChoices(StrEnum):
     NEW_EMPIRE: str = 'New Empire'
     MANAGE_EMPIRE: str = 'Manage Empire'
     END_TURN: str = 'End Turn'
-    EXIT: str = 'Exit'
 
 
-class Play:
+class Play(Actionable):
     """! Class for handling gameplay."""
 
+    __choices: List[str] = [str(x) for x in MenuChoices]
     __empire: Empire = None
 
-    def __init__(self):
-        """! Initialize a new Play object."""
-        pass
-
-    def menu(self) -> str | None:
-        """! Display the main gameplay menu.
-        :return: The choice made by the user
+    def __init__(self, parent_choices: List[str] = None):
+        """! Initialize a new Play object.
+        :param parent_choices: Parent menu choices
         """
-        questions: inquirer.List = [
-            inquirer.List(
-                'choice', message="Infinite PIE Menu", choices=[str(x) for x in MenuChoices],
-            ),
-        ]
+        self.__choices.extend(parent_choices or [])
 
-        answers: dict = inquirer.prompt(questions)
+        super().__init__(self.__choices, "Infinite PIE Menu")
 
-        if answers['choice'] == MenuChoices.NEW_EMPIRE:
-            if self.__empire is not None:
-                confirm: str = input("An empire already exists. Creating a new empire will overwrite the existing one. Continue? (y/n): ")
-                if confirm[0].lower() == 'y':
-                    self.__empire = Empire()
-            else:
-                self.__empire = Empire()
-        elif answers['choice'] == MenuChoices.MANAGE_EMPIRE:
-            if self.__empire is None:
-                print("No empire created. Create a new empire to begin.")
-            else:
-                while self.__empire.menu() != empire.MenuChoices.EXIT:
-                    pass
-        elif answers['choice'] == MenuChoices.END_TURN:
-            if self.__empire is None:
-                print("No empire created. Create a new empire to begin.")
-            else:
-                self.__empire.cycle()
-        elif answers['choice'] == MenuChoices.EXIT:
+    def __selection_new_empire(self) -> None:
+        """! Handle new empire selection."""
+        if self.__empire is None or \
+                input("An empire already exists. Creating a new empire will overwrite the existing one. "
+                      "Continue? (y/n): ")[0].lower() == 'y':
+            self.__empire = Empire([MENU_CHOICE_RETURN])
+
+    def __selection_manage_empire(self) -> None:
+        """! Handle manage empire selection."""
+        if self.__empire is None:
+            print("No empire created. Create a new empire to begin.")
+        else:
+            self.__empire.menu.show()
+
+            while self.__empire.menu.response != MENU_CHOICE_RETURN:
+                self.__empire.run()
+                self.__empire.menu.show()
+
+    def __selection_end_turn(self) -> None:
+        """! Handle end turn selection."""
+        if self.__empire is None:
+            print("No empire created. Create a new empire to begin.")
+        else:
+            self.__empire.cycle()
+
+    def run(self) -> None:
+        """! Run the main gameplay loop."""
+        if self.menu.response == MenuChoices.NEW_EMPIRE:
+            self.__selection_new_empire()
+        elif self.menu.response == MenuChoices.MANAGE_EMPIRE:
+            self.__selection_manage_empire()
+        elif self.menu.response == MenuChoices.END_TURN:
+            self.__selection_end_turn()
+        elif self.menu.response == MenuChoices.EXIT:
             print("Exiting . . .")
         else:
-            print("Invalid choice.")
-
-        return answers['choice']
+            raise ValueError(f"Invalid choice: {self.menu.response}")

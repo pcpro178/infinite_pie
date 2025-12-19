@@ -14,7 +14,6 @@ import ip_lexicon as lexicon
 class Name:
     """! Class for handling names."""
 
-    __label: str = "DefaultLabel"
     __name: str = "DefaultName"
     __prompt: str = "DefaultPrompt"
 
@@ -23,11 +22,7 @@ class Name:
         :param label: The label for the name (e.g., "Empire", "System").
         :param prompt: The prompt to display when asking for a name.
         """
-        self.__label = label if label is not None and label != "" else None
         self.__prompt = prompt if prompt is not None and prompt != "" else None
-
-        if self.__label is None:
-            raise ValueError("Label must be provided and cannot be empty.")
 
         if prompt is None or prompt == "":
             random_name: str = self.random()
