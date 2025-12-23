@@ -9,12 +9,9 @@ import os
 from cmd import Cmd
 from enum import StrEnum
 from io import StringIO
-from typing import List, Type, TypeVar
-
-import inquirer
+from typing import List, Type
 
 from ip_actionable import Actionable
-from ip_menu import Menu
 from ip_name import Name
 from ip_ship import Ship
 from ip_system import System

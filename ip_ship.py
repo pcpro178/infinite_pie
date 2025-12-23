@@ -41,7 +41,7 @@ class Ship:
         return self.__name.name > obj.__name.name
 
     def __lt__(self, obj: Ship) -> bool:
-        """! Override less-than (\<) operator
+        """! Override less-than (<) operator
         :param obj: Object to be compared against
         :return: True or false depending on comparison
         """
