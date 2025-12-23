@@ -76,7 +76,5 @@ class Play(Actionable):
             self.__selection_manage_empire()
         elif self.menu.response == MenuChoices.END_TURN:
             self.__selection_end_turn()
-        elif self.menu.response == MenuChoices.EXIT:
-            print("Exiting . . .")
         else:
             raise ValueError(f"Invalid choice: {self.menu.response}")
