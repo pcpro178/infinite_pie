@@ -5,8 +5,10 @@
 ################################################################################
 
 from __future__ import annotations
+from random import randrange
+from typing import Tuple
 
-import ip_name
+from ip_name import Name
 
 
 ################################################################################
@@ -14,13 +16,13 @@ import ip_name
 ################################################################################
 
 class System:
-    """!Class for handling stellar systems."""
-
-    __name: ip_name.Name = None
+    """! Class for handling stellar systems."""
 
     def __init__(self):
         """! Initialize a new System."""
-        self.__name = ip_name.Name("System")
+        self.__coordinates: Tuple[int, int, int] = (
+            randrange(-1000, 1000), randrange(-1000, 1000), randrange(-1000, 1000))
+        self.__name: Name = Name("System")
 
     def __eq__(self, obj: System) -> bool:
         """! Override equality comparison (==) operator
@@ -51,7 +53,14 @@ class System:
 
     def __str__(self) -> str:
         """! String representation of the System."""
-        return f"System: {self.__name}"
+        return f"{self.__name} {self.__coordinates}"
+
+    @property
+    def coordinates(self) -> Tuple[int, int, int]:
+        """! Accessor property for coordinates attribute.
+        :return: The coordinates attribute
+        """
+        return self.__coordinates
 
     @property
     def name(self) -> str:

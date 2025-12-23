@@ -6,7 +6,7 @@
 
 from __future__ import annotations
 
-import ip_name
+from ip_name import Name
 
 
 ################################################################################
@@ -16,11 +16,9 @@ import ip_name
 class Ship:
     """!Class for base ship type."""
 
-    __name: ip_name.Name = None
-
     def __init__(self):
         """! Initialize a new Ship."""
-        self.__name = ip_name.Name("Ship")
+        self.__name: Name = Name("Ship")
 
     def __eq__(self, obj: Ship) -> bool:
         """! Override equality comparison (==) operator
@@ -51,7 +49,7 @@ class Ship:
 
     def __str__(self) -> str:
         """! String representation of the Ship."""
-        return f"Ship: {self.__name}"
+        return f"{self.__name}"
 
     @property
     def name(self) -> str:

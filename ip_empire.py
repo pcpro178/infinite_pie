@@ -40,23 +40,18 @@ class MenuChoices(StrEnum):
 class Empire(Actionable):
     """! Class for managing empires."""
 
-    __choices: List[str] = [str(x) for x in MenuChoices]
-    __name: Name = None
-    __ships: List[Ship] = []
-    __systems: List[System] = []
-
     def __init__(self, parent_choices: List[str] = None) -> None:
         """! Initializes Empire object instance.
         :param parent_choices: Optional menu choices from parent object
         """
         print("Setting up new Empire . . .")
 
-        self.__choices.extend(parent_choices or [])
+        super().__init__([str(x) for x in MenuChoices] + (parent_choices or []), "Empire Menu")
 
-        super().__init__(self.__choices, "Empire Menu")
-
-        self.__name = Name("Empire", f"Enter {self.__class__.__name__} name [or empty for random]: ")
+        self.__name: Name = Name("Empire", f"Enter {self.__class__.__name__} name [or empty for random]: ")
         self.__name.assign(self)
+        self.__ships: List[Ship] = []
+        self.__systems: List[System] = []
 
         # Create initial systems
         self.__create_members(System, self.__systems)
@@ -82,14 +77,19 @@ class Empire(Actionable):
         """
         num_create_str: str = None
         type_name: str = typeof.__name__.lower()
+
         while num_create_str is None or num_create_str == 0 or not num_create_str.isdigit():
             num_create_str = input(f"Enter the starting number of {type_name}s: ")
+
         num_create_int: int = int(num_create_str)
+
         print(f"{type_name[0].upper() + type_name[1:]}{'s' if 1 < num_create_int else ''} created:", end='')
+
         for i in range(num_create_int):
             obj: object = typeof()
             listof.append(obj)
             print(f"{',' if 0 < i else ''} {obj.name}", end='')
+
         listof.sort()
         print()
 
@@ -103,9 +103,12 @@ class Empire(Actionable):
         type_name: str = typeof.__name__.lower()
         s: str = f"Number of {type_name[0].upper() + type_name[1:]}s: {len(listof)}\r\n"
         names_buffer: StringIO = StringIO()
-        Cmd(stdout=names_buffer).columnize([x.name for x in listof], displaywidth=display_columns)
+
+        Cmd(stdout=names_buffer).columnize([str(x) for x in listof], displaywidth=display_columns)
+
         for line in names_buffer.getvalue().splitlines():
             s += "  " + line + "\r\n"
+
         return s
 
     def cycle(self) -> None:

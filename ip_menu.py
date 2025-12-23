@@ -16,9 +16,6 @@ import inquirer
 class Menu(List[str]):
     """! Class for handling menus."""
 
-    __response: str = None
-    __title: str = "DefaultTitle"
-
     def __init__(self, choices: List[str], title: str = "Select an option:"):
         """! Initialize a new Menu object.
         :param choices: The menu choices
@@ -28,7 +25,9 @@ class Menu(List[str]):
             raise ValueError("Param 'choices' must be provided and contain at least one choice.")
 
         self.extend(choices)
-        self.__title = title
+
+        self.__response: str = "DefaultResponse"
+        self.__title: str = title
 
     def show(self) -> str | None:
         """! Display the menu and get user selection.

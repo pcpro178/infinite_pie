@@ -32,22 +32,20 @@ class MenuChoices(StrEnum):
 class Play(Actionable):
     """! Class for handling gameplay."""
 
-    __choices: List[str] = [str(x) for x in MenuChoices]
-    __empire: Empire = None
-
     def __init__(self, parent_choices: List[str] = None):
         """! Initialize a new Play object.
         :param parent_choices: Parent menu choices
         """
-        self.__choices.extend(parent_choices or [])
-
-        super().__init__(self.__choices, "Infinite PIE Menu")
+        super().__init__([str(x) for x in MenuChoices] + (parent_choices or []), "Infinite PIE Menu")
+        self.__empire: Empire = None
 
     def __selection_new_empire(self) -> None:
         """! Handle new empire selection."""
-        if self.__empire is None or \
-                input("An empire already exists. Creating a new empire will overwrite the existing one. "
-                      "Continue? (y/n): ")[0].lower() == 'y':
+        if self.__empire is not None:
+            choice: str = input("An empire already exists. Creating a new empire will overwrite the existing one. "
+                                "Continue? (y/n): ")
+            self.__empire = Empire([MENU_CHOICE_RETURN]) if choice == '' or choice[0].lower() == 'y' else None
+        else:
             self.__empire = Empire([MENU_CHOICE_RETURN])
 
     def __selection_manage_empire(self) -> None:

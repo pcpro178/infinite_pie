@@ -17,15 +17,13 @@ from ip_menu import Menu
 class Actionable(ABC):
     """! Class for actionable Infinite PIE objects."""
 
-    __menu: Menu = None  # Menu for the actionable object
-
     def __init__(self, choices: List[str], title: str = "Select an option:") -> None:
         """! Initialize a new Actionable object.
         :param choices: Menu choices
         :param title: Title to display above the menu
         """
         super().__init__()
-        self.__menu = Menu(choices, title)
+        self.__menu: Menu = Menu(choices, title)
 
     @property
     def menu(self) -> Menu:

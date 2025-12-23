@@ -14,15 +14,13 @@ import ip_lexicon as lexicon
 class Name:
     """! Class for handling names."""
 
-    __name: str = "DefaultName"
-    __prompt: str = "DefaultPrompt"
-
     def __init__(self, label: str, prompt: str = None) -> None:
         """! Initialize a new name object.
         :param label: The label for the name (e.g., "Empire", "System").
         :param prompt: The prompt to display when asking for a name.
         """
-        self.__prompt = prompt if prompt is not None and prompt != "" else None
+        self.__name: str = "DefaultName"
+        self.__prompt: str = prompt if prompt is not None and prompt != "" else "DefaultPrompt"
 
         if prompt is None or prompt == "":
             random_name: str = self.random()
