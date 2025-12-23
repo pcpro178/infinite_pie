@@ -22,11 +22,11 @@ __game: Play = Play([MENU_CHOICE_EXIT])
 
 def main():
     """! Main function for the program."""
-    __game.menu.show()
+    __game.show()
 
     while __game.menu.response != MENU_CHOICE_EXIT:
         __game.run()
-        __game.menu.show()
+        __game.show()
 
 
 ################################################################################

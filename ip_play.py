@@ -55,11 +55,11 @@ class Play(Actionable):
         if self.__empire is None:
             print("No empire created. Create a new empire to begin.")
         else:
-            self.__empire.menu.show()
+            self.__empire.show()
 
             while self.__empire.menu.response != MENU_CHOICE_RETURN:
                 self.__empire.run()
-                self.__empire.menu.show()
+                self.__empire.show()
 
     def __selection_end_turn(self) -> None:
         """! Handle end turn selection."""
@@ -78,3 +78,7 @@ class Play(Actionable):
             self.__selection_end_turn()
         else:
             raise ValueError(f"Invalid choice: {self.menu.response}")
+
+    def show(self) -> None:
+        """! Show the main menu to the user."""
+        self.menu.show()

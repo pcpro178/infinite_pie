@@ -24,7 +24,7 @@ class Actionable(ABC):
         :param choices: Menu choices
         :param title: Title to display above the menu
         """
-        ABC.__init__(self)
+        super().__init__()
         self.__menu = Menu(choices, title)
 
     @property
@@ -40,3 +40,8 @@ class Actionable(ABC):
         :return: The choice made by the user
         """
         raise NotImplementedError("Subclasses must implement the 'run' method.")
+
+    @abstractmethod
+    def show(self) -> None:
+        """! Show the menu to the user."""
+        raise NotImplementedError("Subclasses must implement the 'show' method.")

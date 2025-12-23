@@ -125,3 +125,7 @@ class Empire(Actionable):
             print(f"Menu option '{self.menu.response}' not yet implemented.")
         else:
             raise ValueError(f"Invalid choice: {self.menu.response}")
+
+    def show(self) -> None:
+        """! Show the empire menu to the user."""
+        self.menu.show()
