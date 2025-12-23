@@ -48,6 +48,9 @@ class Play(Actionable):
         else:
             self.__empire = Empire([MENU_CHOICE_RETURN])
 
+        print(f"Empire {self.__empire.name} created.")
+        print(f"Capital System: {self.__empire.capital}")
+
     def __selection_manage_empire(self) -> None:
         """! Handle manage empire selection."""
         if self.__empire is None:

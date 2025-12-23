@@ -59,7 +59,8 @@ class Empire(Actionable):
         # Create initial ships
         self.__create_members(Ship, self.__ships)
 
-        print(f"Empire {self.__name} created.")
+        # Specify capital system
+        self.__capital: System = self.__systems[0]
 
     def __str__(self) -> str:
         """! Override function to generate object as human readable string
@@ -110,6 +111,20 @@ class Empire(Actionable):
             s += "  " + line + "\r\n"
 
         return s
+
+    @property
+    def capital(self) -> System:
+        """! Accessor property for capital attribute.
+        :return: The capital attribute
+        """
+        return self.__capital
+
+    @property
+    def name(self) -> str:
+        """! Accessor property for name attribute.
+        :return: The name attribute
+        """
+        return self.__name.name
 
     def cycle(self) -> None:
         """! Complete a turn cycle for the object."""
