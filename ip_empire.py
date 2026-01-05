@@ -54,10 +54,10 @@ class Empire(Actionable):
         self.__systems: List[System] = []
 
         # Create initial systems
-        self.__create_members(System, self.__systems)
+        self.__create_systems()
 
         # Create initial ships
-        self.__create_members(Ship, self.__ships)
+        self.__create_ships()
 
         # Specify capital system
         self.__capital: System = self.__systems[0]
@@ -71,13 +71,10 @@ class Empire(Actionable):
         s += self.__members_list_to_string(Ship, self.__ships)
         return s
 
-    def __create_members(self, typeof: Type, listof: list) -> None:
-        """! Instaniates lists of object members
-        :param typeof: Member list type
-        :param listof: Member list
-        """
+    def __create_systems(self) -> None:
+        """! Instaniates lists of object members"""
         num_create_str: str = None
-        type_name: str = typeof.__name__.lower()
+        type_name: str = "system"
 
         while num_create_str is None or num_create_str == 0 or not num_create_str.isdigit():
             num_create_str = input(f"Enter the starting number of {type_name}s: ")
@@ -87,11 +84,31 @@ class Empire(Actionable):
         print(f"{type_name[0].upper() + type_name[1:]}{'s' if 1 < num_create_int else ''} created:", end='')
 
         for i in range(num_create_int):
-            obj: object = typeof()
-            listof.append(obj)
-            print(f"{',' if 0 < i else ''} {obj.name}", end='')
+            system: System = System()
+            self.__systems.append(system)
+            print(f"{',' if 0 < i else ''} {system.name}", end='')
 
-        listof.sort()
+        self.__systems.sort()
+        print()
+
+    def __create_ships(self) -> None:
+        """! Instaniates lists of object members"""
+        num_create_str: str = None
+        type_name: str = "ship"
+
+        while num_create_str is None or num_create_str == 0 or not num_create_str.isdigit():
+            num_create_str = input(f"Enter the starting number of {type_name}s: ")
+
+        num_create_int: int = int(num_create_str)
+
+        print(f"{type_name[0].upper() + type_name[1:]}{'s' if 1 < num_create_int else ''} created:", end='')
+
+        for i in range(num_create_int):
+            ship: Ship = Ship(self.__systems[0].name)
+            self.__ships.append(ship)
+            print(f"{',' if 0 < i else ''} {ship.name}", end='')
+
+        self.__ships.sort()
         print()
 
     def __members_list_to_string(self, typeof: Type, listof: list) -> str:

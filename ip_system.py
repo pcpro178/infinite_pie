@@ -6,9 +6,10 @@
 
 from __future__ import annotations
 from random import randrange
-from typing import Tuple
+from typing import List, Tuple
 
 from ip_name import Name
+from ip_ship import Ship
 
 
 ################################################################################
@@ -23,6 +24,7 @@ class System:
         self.__coordinates: Tuple[int, int, int] = (
             randrange(-1000, 1000), randrange(-1000, 1000), randrange(-1000, 1000))
         self.__name: Name = Name("System")
+        self.__ships: List[Ship] = []
 
     def __eq__(self, obj: System) -> bool:
         """! Override equality comparison (==) operator
@@ -68,3 +70,22 @@ class System:
         :return: The name attribute
         """
         return self.__name.name
+
+    @property
+    def ships(self) -> List[Ship]:
+        """! Accessor property for ships attribute.
+        :return: The ships attribute
+        """
+        return self.__ships
+
+    def add_ship(self, ship: Ship) -> None:
+        """! Add a ship to the system.
+        :param ship: The ship to add
+        """
+        self.__ships.append(ship)
+
+    def remove_ship(self, ship: Ship) -> None:
+        """! Remove a ship from the system.
+        :param ship: The ship to remove
+        """
+        self.__ships.remove(ship)

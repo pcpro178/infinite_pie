@@ -16,8 +16,10 @@ from ip_name import Name
 class Ship:
     """!Class for base ship type."""
 
-    def __init__(self):
+    def __init__(self, base: str):
         """! Initialize a new Ship."""
+        self.__base: str = base
+        self.__destination: str | None = None
         self.__name: Name = Name("Ship")
 
     def __eq__(self, obj: Ship) -> bool:
@@ -49,7 +51,28 @@ class Ship:
 
     def __str__(self) -> str:
         """! String representation of the Ship."""
-        return f"{self.__name}"
+        return f"{self.__name}: {self.__base} -> {self.__destination or 'In Transit or Idle'}"
+
+    @property
+    def base(self) -> str:
+        """! Accessor function for base attribute.
+        :return: The base attribute
+        """
+        return self.__base
+
+    @property
+    def destination(self) -> str | None:
+        """! Accessor function for destination attribute.
+        :return: The destination attribute
+        """
+        return self.__destination
+
+    @destination.setter
+    def destination(self, value: str | None) -> None:
+        """! Mutator function for destination attribute.
+        :param value: The new value for the destination attribute
+        """
+        self.__destination = value
 
     @property
     def name(self) -> str:
