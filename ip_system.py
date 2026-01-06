@@ -8,21 +8,35 @@ from __future__ import annotations
 from random import randrange
 from typing import List, Tuple
 
+from ip_locatable import Locatable
 from ip_name import Name
 from ip_ship import Ship
+
+
+################################################################################
+# Constants & Globals
+################################################################################
+
+DEFAULT_XCOORD_MIN: int = -1000
+DEFAULT_XCOORD_MAX: int = 1000
+DEFAULT_YCOORD_MIN: int = -1000
+DEFAULT_YCOORD_MAX: int = 1000
+DEFAULT_ZCOORD_MIN: int = -1000
+DEFAULT_ZCOORD_MAX: int = 1000
 
 
 ################################################################################
 # Class definitions
 ################################################################################
 
-class System:
+class System(Locatable):
     """! Class for handling stellar systems."""
 
     def __init__(self):
         """! Initialize a new System."""
-        self.__coordinates: Tuple[int, int, int] = (
-            randrange(-1000, 1000), randrange(-1000, 1000), randrange(-1000, 1000))
+        super().__init__(randrange(DEFAULT_XCOORD_MIN, DEFAULT_XCOORD_MAX),
+                         randrange(DEFAULT_YCOORD_MIN, DEFAULT_YCOORD_MAX),
+                         randrange(DEFAULT_ZCOORD_MIN, DEFAULT_ZCOORD_MAX))
         self.__name: Name = Name("System")
         self.__ships: List[Ship] = []
 
@@ -55,14 +69,7 @@ class System:
 
     def __str__(self) -> str:
         """! String representation of the System."""
-        return f"{self.__name} {self.__coordinates}"
-
-    @property
-    def coordinates(self) -> Tuple[int, int, int]:
-        """! Accessor property for coordinates attribute.
-        :return: The coordinates attribute
-        """
-        return self.__coordinates
+        return f"{self.__name} {self.coordinates}"
 
     @property
     def name(self) -> str:

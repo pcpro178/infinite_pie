@@ -45,7 +45,8 @@ class Coordinates:
         """
         return self.__z
 
-class Location(Coordinates):
+
+class Locatable:
     """! Class for handling object locations in space."""
 
     def __init__(self, x: int = 0, y: int = 0, z: int = 0):
@@ -54,20 +55,20 @@ class Location(Coordinates):
         :param y: Y coordinate
         :param z: Z coordinate
         """
-        super().__init__(x, y, z)
+        self.__coordinates: Coordinates = Coordinates(x, y, z)
 
     @property
     def coordinates(self) -> Tuple[int, int, int]:
         """! Accessor for the coordinates as a tuple.
         :return: The coordinates as a tuple (x, y, z)
         """
-        return (self.x, self.y, self.z)
+        return (self.__coordinates.x, self.__coordinates.y, self.__coordinates.z)
 
     def distance(self, other: Coordinates) -> float:
         """! Calculate the Euclidean distance to another Coordinates object.
         :param other: The other Coordinates object
         :return: The Euclidean distance
         """
-        return ((self.x - other.x) ** 2 +
-                (self.y - other.y) ** 2 +
-                (self.z - other.z) ** 2) ** 0.5
+        return ((self.__coordinates.x - other.x) ** 2 +
+                (self.__coordinates.y - other.y) ** 2 +
+                (self.__coordinates.z - other.z) ** 2) ** 0.5

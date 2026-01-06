@@ -6,21 +6,31 @@
 
 from __future__ import annotations
 
+from ip_locatable import Locatable
 from ip_name import Name
+
+
+################################################################################
+# Constants & Globals
+################################################################################
+
+DEFAULT_SPEED: int = 100
 
 
 ################################################################################
 # Class definitions
 ################################################################################
 
-class Ship:
+class Ship(Locatable):
     """!Class for base ship type."""
 
     def __init__(self, base: str):
         """! Initialize a new Ship."""
+        super().__init__()
         self.__base: str = base
         self.__destination: str | None = None
         self.__name: Name = Name("Ship")
+        self.__speed: int = DEFAULT_SPEED
 
     def __eq__(self, obj: Ship) -> bool:
         """! Override equality comparison (==) operator
@@ -80,3 +90,24 @@ class Ship:
         :return: The name attribute
         """
         return self.__name.name
+
+    @name.setter
+    def name(self, value: str) -> None:
+        """! Mutator function for name attribute.
+        :param value: The new value for the name attribute
+        """
+        self.__name.name = value
+
+    @property
+    def speed(self) -> int:
+        """! Accessor function for speed attribute.
+        :return: The speed attribute
+        """
+        return self.__speed
+
+    @speed.setter
+    def speed(self, value: int) -> None:
+        """! Mutator function for speed attribute.
+        :param value: The new value for the speed attribute
+        """
+        self.__speed = value
