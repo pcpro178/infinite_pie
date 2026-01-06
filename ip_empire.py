@@ -13,8 +13,10 @@ from typing import List, Type
 
 from ip_actionable import Actionable
 from ip_name import Name
+from ip_navy import Navy
 from ip_ship import Ship
 from ip_system import System
+from ip_territory import Territory
 
 
 ################################################################################
@@ -50,66 +52,96 @@ class Empire(Actionable):
 
         self.__name: Name = Name("Empire", f"Enter {self.__class__.__name__} name [or empty for random]: ")
         self.__name.assign(self)
-        self.__ships: List[Ship] = []
-        self.__systems: List[System] = []
+        # todo jfell cleanup
+        # self.__ships: List[Ship] = []
+        # self.__systems: List[System] = []
 
         # Create initial systems
-        self.__create_systems()
+        # todo jfell cleanup
+        # self.__init_systems()
+        # self.__systems_menu_tup: Tuple[List[str], str] = ([x.name for x in self.__systems], "Systems Menu")
+        self.__territory: Territory = Territory()
+        self.__territory.systems = self.__init_systems()
 
         # Create initial ships
-        self.__create_ships()
+        # todo jfell cleanup
+        # self.__init_ships()
+        # self.__ships_menu_tup: Tuple[List[str], str] = ([x.name for x in self.__ships], "Ships Menu")
+        self.__navy: Navy = Navy()
+        self.__navy.ships = self.__init_ships()
 
         # Specify capital system
-        self.__capital: System = self.__systems[0]
+        self.__capital: System = self.__territory.systems[0]
 
     def __str__(self) -> str:
         """! Override function to generate object as human readable string
         :return: String representation of object
         """
         s: str = f"Empire: {self.__name}\r\n"
-        s += self.__members_list_to_string(System, self.__systems)
-        s += self.__members_list_to_string(Ship, self.__ships)
+        s += self.__members_list_to_string(System, self.__territory.systems)
+        s += self.__members_list_to_string(Ship, self.__navy.ships)
         return s
 
-    def __create_systems(self) -> None:
-        """! Instaniates lists of object members"""
+    def __init_systems(self) -> List[System]:
+        """! Instaniates lists of object members
+        :return: List of created systems
+        """
         num_create_str: str = None
-        type_name: str = "system"
+        system_lst: List[System] = []
+        # todo jfell cleanup
+        # type_name: str = "system"
 
         while num_create_str is None or num_create_str == 0 or not num_create_str.isdigit():
-            num_create_str = input(f"Enter the starting number of {type_name}s: ")
+            # todo jfell cleanup
+            # num_create_str = input(f"Enter the starting number of {type_name}s: ")
+            num_create_str = input("Enter the starting number of systems: ")
 
         num_create_int: int = int(num_create_str)
 
-        print(f"{type_name[0].upper() + type_name[1:]}{'s' if 1 < num_create_int else ''} created:", end='')
+        # todo jfell cleanup
+        # print(f"{type_name[0].upper() + type_name[1:]}{'s' if 1 < num_create_int else ''} created:", end='')
 
         for i in range(num_create_int):
             system: System = System()
-            self.__systems.append(system)
-            print(f"{',' if 0 < i else ''} {system.name}", end='')
+            system_lst.append(system)
+            # todo jfell cleanup
+            # print(f"{',' if 0 < i else ''} {system.name}", end='')
 
-        self.__systems.sort()
-        print()
+        system_lst.sort()
+        # todo jfell cleanup
+        # print()
+        return system_lst
 
-    def __create_ships(self) -> None:
-        """! Instaniates lists of object members"""
+    def __init_ships(self) -> List[Ship]:
+        """! Instaniates lists of object members
+        :return: List of created ships
+        """
         num_create_str: str = None
-        type_name: str = "ship"
+        ship_lst: List[Ship] = []
+        # todo jfell cleanup
+        # type_name: str = "ship"
 
         while num_create_str is None or num_create_str == 0 or not num_create_str.isdigit():
-            num_create_str = input(f"Enter the starting number of {type_name}s: ")
+            # todo jfell cleanup
+            # num_create_str = input(f"Enter the starting number of {type_name}s: ")
+            num_create_str = input("Enter the starting number of ships: ")
 
         num_create_int: int = int(num_create_str)
 
-        print(f"{type_name[0].upper() + type_name[1:]}{'s' if 1 < num_create_int else ''} created:", end='')
+        # todo jfell cleanup
+        # print(f"{type_name[0].upper() + type_name[1:]}{'s' if 1 < num_create_int else ''} created:", end='')
 
         for i in range(num_create_int):
-            ship: Ship = Ship(self.__systems[0].name)
-            self.__ships.append(ship)
-            print(f"{',' if 0 < i else ''} {ship.name}", end='')
+            ship: Ship = Ship(self.__territory.systems[0].name)
+            ship.coordinates = self.__territory.systems[0].coordinates
+            ship_lst.append(ship)
+            # todo jfell cleanup
+            # print(f"{',' if 0 < i else ''} {ship.name}", end='')
 
-        self.__ships.sort()
-        print()
+        ship_lst.sort()
+        # todo jfell cleanup
+        # print()
+        return ship_lst
 
     def __members_list_to_string(self, typeof: Type, listof: list) -> str:
         """! Converts specified member list to string
@@ -143,6 +175,10 @@ class Empire(Actionable):
         """
         return self.__name.name
 
+    def __manage_systems(self) -> None:
+        """! Manage the empire's systems."""
+        print(f"Function '{self.__manage_systems.__name__}' not yet implemented.")
+
     def cycle(self) -> None:
         """! Complete a turn cycle for the object."""
         print(f"Function '{self.cycle.__name__}' not yet implemented.")
@@ -152,7 +188,7 @@ class Empire(Actionable):
         if self.menu.response == MenuChoices.VIEW_DETAILS:
             print(str(self))
         elif self.menu.response == MenuChoices.MANAGE_SYSTEMS:
-            print(f"Menu option '{self.menu.response}' not yet implemented.")
+            self.__manage_systems()
         elif self.menu.response == MenuChoices.MANAGE_SHIPS:
             print(f"Menu option '{self.menu.response}' not yet implemented.")
         else:

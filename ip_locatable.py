@@ -64,6 +64,13 @@ class Locatable:
         """
         return (self.__coordinates.x, self.__coordinates.y, self.__coordinates.z)
 
+    @coordinates.setter
+    def coordinates(self, coords: Tuple[int, int, int]) -> None:
+        """! Setter for the coordinates.
+        :param coords: The coordinates as a tuple (x, y, z)
+        """
+        self.__coordinates = Coordinates(coords[0], coords[1], coords[2])
+
     def distance(self, other: Coordinates) -> float:
         """! Calculate the Euclidean distance to another Coordinates object.
         :param other: The other Coordinates object
