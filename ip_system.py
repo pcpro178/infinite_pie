@@ -6,9 +6,12 @@
 
 from __future__ import annotations
 from random import randrange
-from typing import List, Tuple
+from typing import List
 
-from ip_locatable import Locatable
+import logging
+
+from ip_actionable import IActionable
+from ip_locatable import ILocatable
 from ip_name import Name
 from ip_ship import Ship
 
@@ -29,14 +32,18 @@ DEFAULT_ZCOORD_MAX: int = 1000
 # Class definitions
 ################################################################################
 
-class System(Locatable):
+class System(IActionable, ILocatable):
     """! Class for handling stellar systems."""
 
     def __init__(self):
         """! Initialize a new System."""
-        super().__init__(randrange(DEFAULT_XCOORD_MIN, DEFAULT_XCOORD_MAX),
-                         randrange(DEFAULT_YCOORD_MIN, DEFAULT_YCOORD_MAX),
-                         randrange(DEFAULT_ZCOORD_MIN, DEFAULT_ZCOORD_MAX))
+        logger: logging.Logger = logging.getLogger()  # get logging object
+        logger.debug(f"Object: {self.__class__.__name__} initializing . . .")
+
+        super().__init__(x=randrange(DEFAULT_XCOORD_MIN, DEFAULT_XCOORD_MAX),
+                         y=randrange(DEFAULT_YCOORD_MIN, DEFAULT_YCOORD_MAX),
+                         z=randrange(DEFAULT_ZCOORD_MIN, DEFAULT_ZCOORD_MAX))
+
         self.__name: Name = Name("System")
         self.__ships: List[Ship] = []
 
@@ -96,3 +103,10 @@ class System(Locatable):
         :param ship: The ship to remove
         """
         self.__ships.remove(ship)
+
+    def run(self) -> None:
+        """! Display the system menu selection."""
+        print(f"System: {self.__name}")
+        print(f"Coordinates: {self.coordinates}")
+        print(f"Number of ships: {len(self.__ships)}")
+        # todo jfell implement system menu

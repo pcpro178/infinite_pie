@@ -5,9 +5,10 @@
 ################################################################################
 
 from enum import StrEnum
-from typing import List
 
-from ip_actionable import Actionable
+import logging
+
+from ip_actionable import IActionable
 from ip_empire import Empire
 
 
@@ -29,24 +30,33 @@ class MenuChoices(StrEnum):
     END_TURN: str = 'End Turn'
 
 
-class Play(Actionable):
+class Play(IActionable):
     """! Class for handling gameplay."""
 
-    def __init__(self, parent_choices: List[str] = None):
-        """! Initialize a new Play object.
-        :param parent_choices: Parent menu choices
-        """
-        super().__init__([str(x) for x in MenuChoices] + (parent_choices or []), "Infinite PIE Menu")
+    def __init__(self):
+        """! Initialize a new Play object."""
+        logger: logging.Logger = logging.getLogger()  # get logging object
+        logger.debug(f"Object: {self.__class__.__name__} initializing . . .")
+
+        super().__init__()
+
+        self.menu.choices.extend([str(x) for x in MenuChoices])
+        self.menu.title = "Infinite PIE Menu"
+
         self.__empire: Empire = None
 
     def __selection_new_empire(self) -> None:
         """! Handle new empire selection."""
+        do_create: bool = True
+
         if self.__empire is not None:
             choice: str = input("An empire already exists. Creating a new empire will overwrite the existing one. "
                                 "Continue? (y/n): ")
-            self.__empire = Empire([MENU_CHOICE_RETURN]) if choice == '' or choice[0].lower() == 'y' else None
-        else:
-            self.__empire = Empire([MENU_CHOICE_RETURN])
+            do_create = choice == '' or choice[0].lower() == 'y'
+
+        if do_create:
+            self.__empire = Empire()
+            self.__empire.menu.choices.extend([MENU_CHOICE_RETURN])
 
         print(f"Empire {self.__empire.name} created.")
         print(f"Capital System: {self.__empire.capital}")
@@ -79,7 +89,3 @@ class Play(Actionable):
             self.__selection_end_turn()
         else:
             raise ValueError(f"Invalid choice: {self.menu.response}")
-
-    def show(self) -> None:
-        """! Show the main menu to the user."""
-        self.menu.show()

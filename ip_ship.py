@@ -6,7 +6,9 @@
 
 from __future__ import annotations
 
-from ip_locatable import Locatable
+import logging
+
+from ip_locatable import ILocatable
 from ip_name import Name
 
 
@@ -21,12 +23,16 @@ DEFAULT_SPEED: int = 100
 # Class definitions
 ################################################################################
 
-class Ship(Locatable):
+class Ship(ILocatable):
     """!Class for base ship type."""
 
     def __init__(self, base: str):
         """! Initialize a new Ship."""
+        logger: logging.Logger = logging.getLogger()  # get logging object
+        logger.debug(f"Object: {self.__class__.__name__} initializing . . .")
+
         super().__init__()
+
         self.__base: str = base
         self.__destination: str | None = None
         self.__name: Name = Name("Ship")

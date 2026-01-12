@@ -13,18 +13,18 @@ import inquirer
 # Class definitions
 ################################################################################
 
-class Menu(List[str]):
+class Menu:
     """! Class for handling menus."""
 
-    def __init__(self, choices: List[str], title: str = "Select an option:"):
+    def __init__(self, choices: List[str] = None, title: str = "Select an option:"):
         """! Initialize a new Menu object.
         :param choices: The menu choices
         :param title: The title to display above the menu
         """
-        if choices is None or len(choices) == 0:
-            raise ValueError("Param 'choices' must be provided and contain at least one choice.")
+        self.__choices: List[str] = []
 
-        self.extend(choices)
+        if choices is not None and len(choices) > 0:
+            self.__choices.extend(choices)
 
         self.__response: str = "DefaultResponse"
         self.__title: str = title
@@ -35,11 +35,18 @@ class Menu(List[str]):
         """
         questions: inquirer.List = [
             inquirer.List(
-                'choice', message=self.__title, choices=self,
+                'choice', message=self.__title, choices=self.__choices,
             ),
         ]
 
         self.__response = inquirer.prompt(questions)['choice']
+
+    @property
+    def choices(self) -> List[str]:
+        """! Accessor for the menu choices.
+        :return: The menu choices
+        """
+        return self.__choices
 
     @property
     def response(self) -> str | None:

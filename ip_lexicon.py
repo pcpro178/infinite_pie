@@ -285,8 +285,10 @@ def assign(name: str, obj: object) -> bool:
     :param obj: Object to which name will be assigned
     :return: Boolean indicating success
     """
-    if name is None or name == "": raise ValueError("Param 'name' must be provided and cannot be empty.")
-    if obj is None: raise ValueError("Param 'obj' must be provided and cannot be None.")
+    if name is None or name == "":
+        raise ValueError("Param 'name' must be provided and cannot be empty.")
+    if obj is None:
+        raise ValueError("Param 'obj' must be provided and cannot be None.")
 
     __names[name] = obj
 

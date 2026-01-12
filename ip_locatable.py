@@ -6,6 +6,8 @@
 
 from typing import Tuple
 
+import logging
+
 
 ################################################################################
 # Class definitions
@@ -46,8 +48,8 @@ class Coordinates:
         return self.__z
 
 
-class Locatable:
-    """! Class for handling object locations in space."""
+class ILocatable:
+    """! Interface class for handling object locations in space."""
 
     def __init__(self, x: int = 0, y: int = 0, z: int = 0):
         """! Initialize a new Location object.
@@ -55,6 +57,9 @@ class Locatable:
         :param y: Y coordinate
         :param z: Z coordinate
         """
+        logger: logging.Logger = logging.getLogger()  # get logging object
+        logger.debug(f"Object: {self.__class__.__name__}.{ILocatable.__name__} initializing . . .")
+
         self.__coordinates: Coordinates = Coordinates(x, y, z)
 
     @property

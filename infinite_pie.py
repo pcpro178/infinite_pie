@@ -6,6 +6,8 @@
 
 from ip_play import Play
 
+import logging
+
 
 ################################################################################
 # Constants & Globals
@@ -13,7 +15,7 @@ from ip_play import Play
 
 MENU_CHOICE_EXIT: str = "Exit"
 
-__game: Play = Play([MENU_CHOICE_EXIT])
+LOGGER_PATH: str = "infinite_pie.log"
 
 
 ################################################################################
@@ -22,6 +24,20 @@ __game: Play = Play([MENU_CHOICE_EXIT])
 
 def main():
     """! Main function for the program."""
+    # Create and configure logger
+    logging.basicConfig(filename=LOGGER_PATH,
+                        format='%(asctime)s %(message)s',
+                        filemode='w')
+
+    # Get logging object
+    logger: logging.Logger = logging.getLogger()
+
+    # Setting the threshold of logger to DEBUG
+    logger.setLevel(logging.DEBUG)
+
+    # Initialize game play
+    __game: Play = Play()
+    __game.menu.choices.extend([MENU_CHOICE_EXIT])
     __game.show()
 
     while __game.menu.response != MENU_CHOICE_EXIT:

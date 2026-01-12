@@ -5,7 +5,8 @@
 ################################################################################
 
 from abc import ABC, abstractmethod
-from typing import List
+
+import logging
 
 from ip_menu import Menu
 
@@ -14,16 +15,19 @@ from ip_menu import Menu
 # Class definitions
 ################################################################################
 
-class Actionable(ABC):
-    """! Class for actionable Infinite PIE objects."""
+class IActionable(ABC):
+    """! Interface class for actionable Infinite PIE objects."""
 
-    def __init__(self, choices: List[str], title: str = "Select an option:") -> None:
+    def __init__(self, **kwargs) -> None:
         """! Initialize a new Actionable object.
-        :param choices: Menu choices
-        :param title: Title to display above the menu
+        :param kwargs: Additional parameters to support multiple inheritance
         """
+        logger: logging.Logger = logging.getLogger()  # get logging object
+        logger.debug(f"Object: {self.__class__.__name__}.{IActionable.__name__} initializing . . .")
+
         super().__init__()
-        self.__menu: Menu = Menu(choices, title)
+
+        self.__menu: Menu = Menu()
 
     @property
     def menu(self) -> Menu:
@@ -39,7 +43,7 @@ class Actionable(ABC):
         """
         raise NotImplementedError("Subclasses must implement the 'run' method.")
 
-    @abstractmethod
     def show(self) -> None:
         """! Show the menu to the user."""
-        raise NotImplementedError("Subclasses must implement the 'show' method.")
+        print(f"Object: {self.__class__.__name__}")
+        self.menu.show()

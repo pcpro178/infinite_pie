@@ -4,6 +4,7 @@
 # Imports
 ################################################################################
 
+import logging
 import os
 
 from cmd import Cmd
@@ -11,7 +12,7 @@ from enum import StrEnum
 from io import StringIO
 from typing import List, Type
 
-from ip_actionable import Actionable
+from ip_actionable import IActionable
 from ip_name import Name
 from ip_navy import Navy
 from ip_ship import Ship
@@ -39,36 +40,31 @@ class MenuChoices(StrEnum):
     MANAGE_SHIPS: str = 'Manage Ships'
 
 
-class Empire(Actionable):
+class Empire(IActionable):
     """! Class for managing empires."""
 
-    def __init__(self, parent_choices: List[str] = None) -> None:
-        """! Initializes Empire object instance.
-        :param parent_choices: Optional menu choices from parent object
-        """
-        print("Setting up new Empire . . .")
+    def __init__(self) -> None:
+        """! Initializes Empire object instance."""
+        logger: logging.Logger = logging.getLogger()  # get logging object
+        logger.debug(f"Object: {self.__class__.__name__} initializing . . .")
 
-        super().__init__([str(x) for x in MenuChoices] + (parent_choices or []), "Empire Menu")
+        super().__init__()
+
+        self.menu.choices.extend([str(x) for x in MenuChoices])
+        self.menu.title = "Empire Menu"
 
         self.__name: Name = Name("Empire", f"Enter {self.__class__.__name__} name [or empty for random]: ")
         self.__name.assign(self)
-        # todo jfell cleanup
-        # self.__ships: List[Ship] = []
-        # self.__systems: List[System] = []
 
         # Create initial systems
-        # todo jfell cleanup
-        # self.__init_systems()
-        # self.__systems_menu_tup: Tuple[List[str], str] = ([x.name for x in self.__systems], "Systems Menu")
         self.__territory: Territory = Territory()
         self.__territory.systems = self.__init_systems()
+        self.__territory.menu.choices.extend([MENU_CHOICE_RETURN])
 
         # Create initial ships
-        # todo jfell cleanup
-        # self.__init_ships()
-        # self.__ships_menu_tup: Tuple[List[str], str] = ([x.name for x in self.__ships], "Ships Menu")
         self.__navy: Navy = Navy()
         self.__navy.ships = self.__init_ships()
+        self.__navy.menu.choices.extend([MENU_CHOICE_RETURN])
 
         # Specify capital system
         self.__capital: System = self.__territory.systems[0]
@@ -88,28 +84,18 @@ class Empire(Actionable):
         """
         num_create_str: str = None
         system_lst: List[System] = []
-        # todo jfell cleanup
-        # type_name: str = "system"
 
         while num_create_str is None or num_create_str == 0 or not num_create_str.isdigit():
-            # todo jfell cleanup
-            # num_create_str = input(f"Enter the starting number of {type_name}s: ")
             num_create_str = input("Enter the starting number of systems: ")
 
         num_create_int: int = int(num_create_str)
 
-        # todo jfell cleanup
-        # print(f"{type_name[0].upper() + type_name[1:]}{'s' if 1 < num_create_int else ''} created:", end='')
-
         for i in range(num_create_int):
             system: System = System()
             system_lst.append(system)
-            # todo jfell cleanup
-            # print(f"{',' if 0 < i else ''} {system.name}", end='')
 
         system_lst.sort()
-        # todo jfell cleanup
-        # print()
+
         return system_lst
 
     def __init_ships(self) -> List[Ship]:
@@ -118,29 +104,19 @@ class Empire(Actionable):
         """
         num_create_str: str = None
         ship_lst: List[Ship] = []
-        # todo jfell cleanup
-        # type_name: str = "ship"
 
         while num_create_str is None or num_create_str == 0 or not num_create_str.isdigit():
-            # todo jfell cleanup
-            # num_create_str = input(f"Enter the starting number of {type_name}s: ")
             num_create_str = input("Enter the starting number of ships: ")
 
         num_create_int: int = int(num_create_str)
-
-        # todo jfell cleanup
-        # print(f"{type_name[0].upper() + type_name[1:]}{'s' if 1 < num_create_int else ''} created:", end='')
 
         for i in range(num_create_int):
             ship: Ship = Ship(self.__territory.systems[0].name)
             ship.coordinates = self.__territory.systems[0].coordinates
             ship_lst.append(ship)
-            # todo jfell cleanup
-            # print(f"{',' if 0 < i else ''} {ship.name}", end='')
 
         ship_lst.sort()
-        # todo jfell cleanup
-        # print()
+
         return ship_lst
 
     def __members_list_to_string(self, typeof: Type, listof: list) -> str:
@@ -177,7 +153,15 @@ class Empire(Actionable):
 
     def __manage_systems(self) -> None:
         """! Manage the empire's systems."""
-        print(f"Function '{self.__manage_systems.__name__}' not yet implemented.")
+        while self.__territory.menu.response != MENU_CHOICE_RETURN:
+            self.__territory.run()
+            self.__territory.show()
+
+    def __manage_ships(self) -> None:
+        """! Manage the empire's ships."""
+        while self.__navy.menu.response != MENU_CHOICE_RETURN:
+            self.__navy.run()
+            self.__navy.show()
 
     def cycle(self) -> None:
         """! Complete a turn cycle for the object."""
@@ -190,10 +174,6 @@ class Empire(Actionable):
         elif self.menu.response == MenuChoices.MANAGE_SYSTEMS:
             self.__manage_systems()
         elif self.menu.response == MenuChoices.MANAGE_SHIPS:
-            print(f"Menu option '{self.menu.response}' not yet implemented.")
+            self.__manage_ships()
         else:
             raise ValueError(f"Invalid choice: {self.menu.response}")
-
-    def show(self) -> None:
-        """! Show the empire menu to the user."""
-        self.menu.show()
