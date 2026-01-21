@@ -69,14 +69,21 @@ class Empire(IActionable):
         # Specify capital system
         self.__capital: System = self.__territory.systems[0]
 
-    def __str__(self) -> str:
-        """! Override function to generate object as human readable string
+    def __repr__(self) -> str:
+        """! String representation of the Empire object for program usage
         :return: String representation of object
         """
-        s: str = f"Empire: {self.__name}\r\n"
+        s: str = f"Empire:         {self.__name}\r\n"
+        s += f"Capital system: {self.__capital}\r\n"
         s += self.__members_list_to_string(System, self.__territory.systems)
         s += self.__members_list_to_string(Ship, self.__navy.ships)
         return s
+
+    def __str__(self) -> str:
+        """! String representation of the Empire object for user display
+        :return: String representation of object
+        """
+        return f"{self.__name}"
 
     def __init_systems(self) -> List[System]:
         """! Instaniates lists of object members
@@ -127,7 +134,7 @@ class Empire(IActionable):
         """
         display_columns: int = os.get_terminal_size().columns
         type_name: str = typeof.__name__.lower()
-        s: str = f"Number of {type_name[0].upper() + type_name[1:]}s: {len(listof)}\r\n"
+        s: str = f"{type_name[0].upper() + type_name[1:]}s ({len(listof)}): \r\n"
         names_buffer: StringIO = StringIO()
 
         Cmd(stdout=names_buffer).columnize([str(x) for x in listof], displaywidth=display_columns)
@@ -170,7 +177,7 @@ class Empire(IActionable):
     def run(self) -> None:
         """! Run the empire menu selection."""
         if self.menu.response == MenuChoices.VIEW_DETAILS:
-            print(str(self))
+            print(repr(self))
         elif self.menu.response == MenuChoices.MANAGE_SYSTEMS:
             self.__manage_systems()
         elif self.menu.response == MenuChoices.MANAGE_SHIPS:

@@ -74,9 +74,17 @@ class System(IActionable, ILocatable):
             raise ValueError(f"Param 'obj' (type={type(obj)}) must be of type {type(self)}")
         return self.__name.name < obj.__name.name
 
-    def __str__(self) -> str:
-        """! String representation of the System."""
+    def __repr__(self) -> str:
+        """! String representation of the System object for program usage
+        :return: String representation of the System object
+        """
         return f"{self.__name} {self.coordinates}"
+
+    def __str__(self) -> str:
+        """! String representation of the System object for user display
+        :return: String representation of the System
+        """
+        return f"{self.__name}"
 
     @property
     def name(self) -> str:

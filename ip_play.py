@@ -58,8 +58,9 @@ class Play(IActionable):
             self.__empire = Empire()
             self.__empire.menu.choices.extend([MENU_CHOICE_RETURN])
 
-        print(f"Empire {self.__empire.name} created.")
-        print(f"Capital System: {self.__empire.capital}")
+        print()
+        print(f"Empire {self.__empire.name} created. Capital system: {self.__empire.capital}")
+        print()
 
     def __selection_manage_empire(self) -> None:
         """! Handle manage empire selection."""

@@ -65,9 +65,17 @@ class Ship(ILocatable):
             raise ValueError(f"Param 'obj' (type={type(obj)}) must be of type {type(self)}")
         return self.__name.name < obj.__name.name
 
-    def __str__(self) -> str:
-        """! String representation of the Ship."""
+    def __repr__(self) -> str:
+        """! String representation of the Ship object for program usage
+        :return: String representation of the Ship object
+        """
         return f"{self.__name}: {self.__base} -> {self.__destination or 'In Transit or Idle'}"
+
+    def __str__(self) -> str:
+        """! String representation of the Ship object for user display
+        :return: String representation of the Ship
+        """
+        return f"{self.__name}"
 
     @property
     def base(self) -> str:
