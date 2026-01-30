@@ -61,14 +61,21 @@ class Territory(IActionable):
 
     def run(self) -> None:
         """! Display the territory menu selection."""
+        system_names: List[str] = [str(system) for system in self.__systems]
+
         if self.menu.response == str(MenuChoices.VIEW_DETAILS):
             print("Showing territory details...")
             for system in self.__systems:
                 print(f"- {system}")
-        elif self.menu.response in [str(system) for system in self.__systems]:
+        elif self.menu.response in system_names:
             print(f"Showing details for system: {self.menu.response}")
-            selected_system: System = next((s for s in self.__systems if str(s) == self.menu.response), None)
+
+            selected_system: System = self.__systems[system_names.index(self.menu.response)]
+
             if selected_system:
+                selected_system.run()
                 selected_system.show()
+            else:
+                raise ValueError(f"Selected system '{self.menu.response}' not found.")
         else:
-            print("Todo: Handle other territory menu choices.")
+            raise ValueError(f"Unhandled menu choice: {self.menu.response}")

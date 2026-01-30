@@ -5,6 +5,7 @@
 ################################################################################
 
 from __future__ import annotations
+from enum import StrEnum
 from random import randrange
 from typing import List
 
@@ -32,6 +33,12 @@ DEFAULT_ZCOORD_MAX: int = 1000
 # Class definitions
 ################################################################################
 
+class MenuChoices(StrEnum):
+    """! Enumeration for system menu choices."""
+    VIEW_DETAILS: str = 'View Details'
+    BUILD_SHIP: str = 'Build Ship'
+
+
 class System(IActionable, ILocatable):
     """! Class for handling stellar systems."""
 
@@ -43,6 +50,9 @@ class System(IActionable, ILocatable):
         super().__init__(x=randrange(DEFAULT_XCOORD_MIN, DEFAULT_XCOORD_MAX),
                          y=randrange(DEFAULT_YCOORD_MIN, DEFAULT_YCOORD_MAX),
                          z=randrange(DEFAULT_ZCOORD_MIN, DEFAULT_ZCOORD_MAX))
+
+        self.menu.choices.extend([str(x) for x in MenuChoices])
+        self.menu.title = "System Menu"
 
         self.__name: Name = Name("System")
         self.__ships: List[Ship] = []
